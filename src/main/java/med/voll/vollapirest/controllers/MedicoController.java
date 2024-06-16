@@ -26,12 +26,12 @@ public class MedicoController {
 
 
     @PostMapping
-    public ResponseEntity<RespuestaMedicoDTO> registrarMedico(@RequestBody @Valid RegistroMedicoDTO json,
-                                                              UriComponentsBuilder ucb) {
-        Medico medico = medicoRepository.save(new Medico(json));
-        RespuestaMedicoDTO respuesta = new RespuestaMedicoDTO(medico);
+    @Transactional
+    public ResponseEntity<DetallesMedicoDTO> registrarMedico(@RequestBody @Valid RegistroMedicoDTO datosMedico,
+                                                             UriComponentsBuilder ucb) {
+        Medico medico = medicoRepository.save(new Medico(datosMedico));
         URI url = ucb.path("/medicos/{id}").buildAndExpand(medico.getId()).toUri();
-        return ResponseEntity.created(url).body(respuesta);
+        return ResponseEntity.created(url).body(new DetallesMedicoDTO(medico));
     }
 
                   //El parámetro Pageable puedes verlo como la configuración de la Page. Se modifica por medio de
@@ -42,10 +42,10 @@ public class MedicoController {
 
     @PutMapping //Esta anotación abre una transacción en la BD y cuando termina el método (sin errores)
     @Transactional //hace un "commit" de los cambios realizados a la BD. La transacción se libera al terminar.
-    public ResponseEntity<RespuestaMedicoDTO> actualizarMedico(@RequestBody @Valid ActualizarMedicoDTO datosMedico) {
+    public ResponseEntity<DetallesMedicoDTO> actualizarMedico(@RequestBody @Valid ActualizarMedicoDTO datosMedico) {
         Medico medico = medicoRepository.getReferenceById(datosMedico.id());
         medico.actualizarDatos(datosMedico);
-        return ResponseEntity.ok(new RespuestaMedicoDTO(medico));
+        return ResponseEntity.ok(new DetallesMedicoDTO(medico));
     }
 
     @DeleteMapping("/{id}")
@@ -57,10 +57,8 @@ public class MedicoController {
     }
 
     @GetMapping("/{id}")
-    @Transactional
-    public ResponseEntity<RespuestaMedicoDTO> retornarMedico(@PathVariable Long id) {
+    public ResponseEntity<DetallesMedicoDTO> retornarMedico(@PathVariable Long id) {
         Medico medico = medicoRepository.getReferenceById(id);
-        var datosMedico = new RespuestaMedicoDTO(medico);
-        return ResponseEntity.ok(datosMedico);
+        return ResponseEntity.ok(new DetallesMedicoDTO(medico));
     }
 }

@@ -8,7 +8,8 @@ public record ListadoMedicoDTO(
         String documento,
         String email
 ) {
-    public ListadoMedicoDTO(Medico m) {
-        this(m.getNombre(), m.getEspecialidad().toString(), m.getDocumento(), m.getEmail());
+    public ListadoMedicoDTO(Medico medico) {
+        this(medico.getNombre(), medico.getEspecialidad().toString(),
+                medico.getDocumento(), medico.getEmail());
     }
 }

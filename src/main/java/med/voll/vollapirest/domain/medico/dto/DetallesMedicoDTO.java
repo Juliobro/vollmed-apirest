@@ -4,7 +4,7 @@ import med.voll.vollapirest.domain.direccion.dto.DireccionDTO;
 import med.voll.vollapirest.domain.medico.Especialidad;
 import med.voll.vollapirest.domain.medico.Medico;
 
-public record RespuestaMedicoDTO(
+public record DetallesMedicoDTO(
         Long id,
         String nombre,
         String email,
@@ -13,7 +13,7 @@ public record RespuestaMedicoDTO(
         String documento,
         DireccionDTO direccion
 ) {
-    public RespuestaMedicoDTO(Medico medico) {
+    public DetallesMedicoDTO(Medico medico) {
         this(medico.getId(), medico.getNombre(), medico.getEmail(), medico.getEspecialidad(),
                 medico.getTelefono(), medico.getDocumento(), new DireccionDTO(medico.getDireccion()));
     }

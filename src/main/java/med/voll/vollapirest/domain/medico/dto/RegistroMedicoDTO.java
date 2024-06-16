@@ -10,25 +10,24 @@ import med.voll.vollapirest.domain.medico.Especialidad;
 
 public record RegistroMedicoDTO(
 
-        //El message es para personalizar el mensaje cuando no se cumple la anotacion
-        @NotBlank(message = "Nombre es obligatorio")
+        @NotBlank(message = "{validation.nombre}")
         String nombre,
 
-        @NotBlank(message = "Email es obligatorio")
+        @NotBlank(message = "{validation.email}")
         @Email
         String email,
 
-        @NotBlank(message = "Teléfono es obligatorio")
+        @NotBlank(message = "{validation.telefono}")
         String telefono,
 
-        @NotBlank(message = "Documento es obligatorio")
-        @Pattern(regexp = "\\d{4,6}", message = "Documento debe ser entre 4 y 6 numeros")
+        @NotBlank(message = "{validation.documento}")
+        @Pattern(regexp = "\\d{4,6}", message = "{validation.documento.pattern}")
         String documento,
 
-        @NotNull(message = "Espcialidad es obligatoria")
+        @NotNull(message = "{validation.especialidad}")
         Especialidad especialidad,
 
-        @NotNull(message = "Direccion es obligatoria")
+        @NotNull(message = "{validation.direccion}")
         @Valid //Lo que hace valid es indicar que verifique las condiciones especificadas dentro de la clase
         DireccionDTO direccion
 ) {

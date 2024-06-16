@@ -33,28 +33,28 @@ public class Medico {
     private String telefono;
     private boolean activo;
 
-    public Medico(RegistroMedicoDTO registroMedico) {
-        this.nombre = registroMedico.nombre();
-        this.email = registroMedico.email();
-        this.documento = registroMedico.documento();
-        this.especialidad = registroMedico.especialidad();
-        this.direccion = new Direccion(registroMedico.direccion());
-        this.telefono = registroMedico.telefono();
+    public Medico(RegistroMedicoDTO datos) {
+        this.nombre = datos.nombre();
+        this.email = datos.email();
+        this.documento = datos.documento();
+        this.telefono = datos.telefono();
+        this.especialidad = datos.especialidad();
+        this.direccion = new Direccion(datos.direccion());
         this.activo = true;
     }
 
-    public void actualizarDatos(ActualizarMedicoDTO datosMedico) {
-        this.nombre = datosMedico.nombre() != null
-                ? datosMedico.nombre()
+    public void actualizarDatos(ActualizarMedicoDTO datos) {
+        this.nombre = datos.nombre() != null
+                ? datos.nombre()
                 : this.nombre;
-        this.documento = datosMedico.documento() != null
-                ? datosMedico.documento()
+        this.documento = datos.documento() != null
+                ? datos.documento()
                 : this.documento;
-        this.telefono = datosMedico.telefono() != null
-                ? datosMedico.telefono()
+        this.telefono = datos.telefono() != null
+                ? datos.telefono()
                 : this.telefono;
-        this.direccion = datosMedico.direccion() != null
-                ? direccion.actualizarDatos(datosMedico.direccion())
+        this.direccion = datos.direccion() != null
+                ? direccion.actualizarDatos(datos.direccion())
                 : this.direccion;
     }
 

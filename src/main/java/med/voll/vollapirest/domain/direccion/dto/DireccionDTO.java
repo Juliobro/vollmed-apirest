@@ -5,20 +5,19 @@ import med.voll.vollapirest.domain.direccion.Direccion;
 
 public record DireccionDTO(
 
-        //Aquí estoy obteniendo el contenido de mensaje desde el archivo .properties correspondiente
-        @NotBlank(message = "{validation.calle}")
+        @NotBlank(message = "Calle es obligatoria")
         String calle,
 
-        @NotBlank(message = "{validation.distrito}")
+        @NotBlank(message = "Distrito es obligatorio")
         String distrito,
 
-        @NotBlank(message = "{validation.ciudad}")
+        @NotBlank(message = "Ciudad es obligatoria")
         String ciudad,
 
-        @NotBlank(message = "{validation.numero}")
+        @NotBlank(message = "Número es obligatorio")
         String numero,
 
-        @NotBlank(message = "{validation.complemento}")
+        @NotBlank(message = "Complemento es obligatorio")
         String complemento
 ) {
     public DireccionDTO(Direccion direccion) {
