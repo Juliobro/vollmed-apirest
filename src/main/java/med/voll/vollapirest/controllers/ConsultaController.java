@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/consultas")
@@ -24,9 +27,10 @@ public class ConsultaController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<DetallesConsultaDTO> agendarConsulta(@RequestBody @Valid AgendarConsultaDTO datos) {
-        agendarService.agendar(datos);
-        return ResponseEntity.ok(new DetallesConsultaDTO(
-                datos.id(), datos.idMedico(), datos.idPaciente(), datos.fecha()));
+    public ResponseEntity<DetallesConsultaDTO> agendarConsulta(@RequestBody @Valid AgendarConsultaDTO datos,
+                                                               UriComponentsBuilder ucb) {
+        var consulta = agendarService.agendar(datos);
+        URI url = ucb.path("/consultas/{id}").buildAndExpand(consulta.id()).toUri();
+        return ResponseEntity.created(url).body(consulta);
     }
 }
