@@ -2,6 +2,8 @@ package med.voll.vollapirest.controllers;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import med.voll.vollapirest.domain.consulta.Consulta;
+import med.voll.vollapirest.domain.consulta.ConsultaRepository;
 import med.voll.vollapirest.domain.consulta.dto.AgendarConsultaDTO;
 import med.voll.vollapirest.domain.consulta.dto.CancelarConsultaDTO;
 import med.voll.vollapirest.domain.consulta.dto.DetallesConsultaDTO;
@@ -17,9 +19,11 @@ import java.net.URI;
 public class ConsultaController {
 
     private final ConsultaService service;
+    private final ConsultaRepository consultaRepository;
 
-    public ConsultaController(ConsultaService service) {
+    public ConsultaController(ConsultaService service, ConsultaRepository consultaRepository) {
         this.service = service;
+        this.consultaRepository = consultaRepository;
     }
 
 
@@ -37,5 +41,11 @@ public class ConsultaController {
     public ResponseEntity<Void> cancelarConsulta(@RequestBody @Valid CancelarConsultaDTO datos) {
         service.cancelar(datos);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DetallesConsultaDTO> mostrarConsulta(@PathVariable Long id) {
+        Consulta consulta = consultaRepository.getReferenceById(id);
+        return ResponseEntity.ok(new DetallesConsultaDTO(consulta));
     }
 }
