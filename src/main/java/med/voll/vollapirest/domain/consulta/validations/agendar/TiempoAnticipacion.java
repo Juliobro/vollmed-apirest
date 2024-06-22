@@ -1,4 +1,4 @@
-package med.voll.vollapirest.domain.consulta.validations;
+package med.voll.vollapirest.domain.consulta.validations.agendar;
 
 import jakarta.validation.ValidationException;
 import med.voll.vollapirest.domain.consulta.dto.AgendarConsultaDTO;
@@ -8,13 +8,13 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Component
-public class TiempoAnticipacion implements ConsultasValidator {
+public class TiempoAnticipacion implements AgendarConsultasValidator {
     public void validar(AgendarConsultaDTO datos) {
         var ahora = LocalDateTime.now();
         var horaConsulta = datos.fecha();
-        var diferenciaEnMinutos = Duration.between(ahora, horaConsulta);
+        var tiempoDiferencia = Duration.between(ahora, horaConsulta);
 
-        if (diferenciaEnMinutos.toMinutes() < 30) {
+        if (tiempoDiferencia.toMinutes() < 30) {
             throw new ValidationException(
                     "Debes programar la consulta con al menos 30 minutos de anticipación");
         }

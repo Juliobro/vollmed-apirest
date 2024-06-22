@@ -1,4 +1,4 @@
-package med.voll.vollapirest.domain.consulta.validations;
+package med.voll.vollapirest.domain.consulta.validations.agendar;
 
 import jakarta.validation.ValidationException;
 import med.voll.vollapirest.domain.consulta.dto.AgendarConsultaDTO;
@@ -6,7 +6,7 @@ import med.voll.vollapirest.domain.medico.MedicoRepository;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MedicoActivo implements ConsultasValidator {
+public class MedicoActivo implements AgendarConsultasValidator {
 
     private final MedicoRepository medicoRepository;
 

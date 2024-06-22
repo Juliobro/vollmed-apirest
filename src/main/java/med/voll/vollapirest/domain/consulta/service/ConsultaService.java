@@ -3,8 +3,10 @@ package med.voll.vollapirest.domain.consulta.service;
 import med.voll.vollapirest.domain.consulta.Consulta;
 import med.voll.vollapirest.domain.consulta.ConsultaRepository;
 import med.voll.vollapirest.domain.consulta.dto.AgendarConsultaDTO;
+import med.voll.vollapirest.domain.consulta.dto.CancelarConsultaDTO;
 import med.voll.vollapirest.domain.consulta.dto.DetallesConsultaDTO;
-import med.voll.vollapirest.domain.consulta.validations.ConsultasValidator;
+import med.voll.vollapirest.domain.consulta.validations.agendar.AgendarConsultasValidator;
+import med.voll.vollapirest.domain.consulta.validations.cancelar.CancelarConsultasValidator;
 import med.voll.vollapirest.domain.medico.Medico;
 import med.voll.vollapirest.domain.medico.MedicoRepository;
 import med.voll.vollapirest.domain.paciente.Paciente;
@@ -14,23 +16,25 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
 @Service
-public class AgendarConsultaService {   //Se busca que cumpla con la inversión de depedencia
+public class ConsultaService {   //Se busca que cumpla con la inversión de depedencia
 
     private final ConsultaRepository consultaRepository;
     private final MedicoRepository medicoRepository;
     private final PacienteRepository pacienteRepository;
-    private final List<ConsultasValidator> validadores;
+    private final List<AgendarConsultasValidator> validadoresAgendar;
+    private final List<CancelarConsultasValidator> validadoresCancelar;
 
-    public AgendarConsultaService(ConsultaRepository consultaRepository,
-                                  MedicoRepository medicoRepository,
-                                  PacienteRepository pacienteRepository,
-                                  List<ConsultasValidator> validadores) {
+    public ConsultaService(ConsultaRepository consultaRepository,
+                           MedicoRepository medicoRepository,
+                           PacienteRepository pacienteRepository,
+                           List<AgendarConsultasValidator> validadoresAgendar,
+                           List<CancelarConsultasValidator> validadoresCancelar) {
         this.consultaRepository = consultaRepository;
         this.medicoRepository = medicoRepository;
         this.pacienteRepository = pacienteRepository;
-        this.validadores = validadores;
+        this.validadoresAgendar = validadoresAgendar;
+        this.validadoresCancelar = validadoresCancelar;
     }
 
 
@@ -45,7 +49,7 @@ public class AgendarConsultaService {   //Se busca que cumpla con la inversión 
             throw new ValidacionDeIntegridadException("El ID proporcionado para el médico no fue encontrado");
         }
 
-        validadores.forEach(v -> v.validar(datosAgenda));
+        validadoresAgendar.forEach(v -> v.validar(datosAgenda));
 
         Paciente paciente = pacienteRepository.findById(datosAgenda.idPaciente()).get();
         Medico medico = seleccionarMedico(datosAgenda);
@@ -54,11 +58,23 @@ public class AgendarConsultaService {   //Se busca que cumpla con la inversión 
                     "No hay médicos disponibles para esta especialidad en este horario");
         }
 
-        Consulta consulta = new Consulta(null, medico, paciente, datosAgenda.fecha());
+        Consulta consulta = new Consulta(medico, paciente, datosAgenda.fecha());
         consultaRepository.save(consulta);
-
         return new DetallesConsultaDTO(consulta);
     }
+
+
+    public void cancelar(CancelarConsultaDTO datosCancelacion) {
+        if (!consultaRepository.existsById(datosCancelacion.idConsulta())) {
+            throw new ValidacionDeIntegridadException("El ID proporcionado para la consulta no fue encontrado");
+        }
+
+        validadoresCancelar.forEach(v -> v.validar(datosCancelacion));
+        Consulta consulta = consultaRepository.getReferenceById(datosCancelacion.idConsulta());
+        consulta.cancelar(datosCancelacion.motivo());
+    }
+
+
 
     private Medico seleccionarMedico(AgendarConsultaDTO datosAgenda) {
         if (datosAgenda.idMedico() != null) {

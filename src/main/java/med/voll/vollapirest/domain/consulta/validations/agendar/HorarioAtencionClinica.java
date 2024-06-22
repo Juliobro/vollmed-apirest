@@ -1,4 +1,4 @@
-package med.voll.vollapirest.domain.consulta.validations;
+package med.voll.vollapirest.domain.consulta.validations.agendar;
 
 import jakarta.validation.ValidationException;
 import med.voll.vollapirest.domain.consulta.dto.AgendarConsultaDTO;
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.time.DayOfWeek;
 
 @Component
-public class HorarioAtencionClinica implements ConsultasValidator {
+public class HorarioAtencionClinica implements AgendarConsultasValidator {
     public void validar(AgendarConsultaDTO datos) {
         var domingo = DayOfWeek.SUNDAY.equals(datos.fecha().getDayOfWeek());
         var antesDeApertura = datos.fecha().getHour() < 7;
