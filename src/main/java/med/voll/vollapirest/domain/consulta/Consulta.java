@@ -42,6 +42,7 @@ public class Consulta {
         this.medico = medico;
         this.paciente = paciente;
         this.fecha = fecha;
+        this.activa = true;
     }
 
     public void cancelar(MotivoCancelacion motivo) {

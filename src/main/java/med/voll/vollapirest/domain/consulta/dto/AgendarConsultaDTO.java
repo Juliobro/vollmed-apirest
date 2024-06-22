@@ -7,7 +7,6 @@ import med.voll.vollapirest.domain.medico.Especialidad;
 import java.time.LocalDateTime;
 
 public record AgendarConsultaDTO(
-        Long id,
         Long idMedico,
 
         @NotNull

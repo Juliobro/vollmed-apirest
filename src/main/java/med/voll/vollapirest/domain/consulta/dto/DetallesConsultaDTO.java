@@ -8,10 +8,11 @@ public record DetallesConsultaDTO(
         Long id,
         Long idMedico,
         Long idPaciente,
-        LocalDateTime fecha
+        LocalDateTime fecha,
+        boolean activa
 ) {
     public DetallesConsultaDTO(Consulta consulta) {
         this(consulta.getId(), consulta.getMedico().getId(),
-                consulta.getPaciente().getId(), consulta.getFecha());
+                consulta.getPaciente().getId(), consulta.getFecha(), consulta.isActiva());
     }
 }
