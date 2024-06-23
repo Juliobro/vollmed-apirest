@@ -1,5 +1,7 @@
 package med.voll.vollapirest.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import med.voll.vollapirest.domain.usuarios.Usuario;
 import med.voll.vollapirest.domain.usuarios.dto.AutenticacionUsuarioDTO;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/login")
+@Tag(name = "Autenticación Controller", description = "Incluye el 'Login' de usuario para autenticarte")
 public class AutenticacionController {
 
     private final AuthenticationManager authenticationManager;
@@ -28,6 +31,7 @@ public class AutenticacionController {
 
 
     @PostMapping
+    @Operation(summary = "Autenticación de usuario", description = "Genera tu JWT para acceder las demás request")
     public ResponseEntity<JwtDTO> autenticarUsuario(@RequestBody @Valid AutenticacionUsuarioDTO datosAutenticacion) {
         Authentication authToken = new UsernamePasswordAuthenticationToken(
                 datosAutenticacion.login(), datosAutenticacion.password());

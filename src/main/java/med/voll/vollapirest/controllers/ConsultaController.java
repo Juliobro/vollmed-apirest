@@ -1,5 +1,8 @@
 package med.voll.vollapirest.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import med.voll.vollapirest.domain.consulta.Consulta;
@@ -16,6 +19,8 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/consultas")
+@SecurityRequirement(name = "bearer-key")
+@Tag(name = "Consulta Controller", description = "Agendar, mostrar y cancelar consultas")
 public class ConsultaController {
 
     private final ConsultaService service;
@@ -29,6 +34,7 @@ public class ConsultaController {
 
     @PostMapping
     @Transactional
+    @Operation(summary = "Agendar una consulta", description = "Crea una nueva entidad de Consulta en la BD")
     public ResponseEntity<DetallesConsultaDTO> agendarConsulta(@RequestBody @Valid AgendarConsultaDTO datos,
                                                                UriComponentsBuilder ucb) {
         var consulta = service.agendar(datos);
@@ -38,12 +44,14 @@ public class ConsultaController {
 
     @DeleteMapping
     @Transactional
+    @Operation(summary = "Cancelar una consulta", description = "Establece una consulta como inactiva en la BD")
     public ResponseEntity<Void> cancelarConsulta(@RequestBody @Valid CancelarConsultaDTO datos) {
         service.cancelar(datos);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Mostrar una consulta", description = "Muestra una consulta de la BD según el ID proporcionado")
     public ResponseEntity<DetallesConsultaDTO> mostrarConsulta(@PathVariable Long id) {
         Consulta consulta = consultaRepository.getReferenceById(id);
         return ResponseEntity.ok(new DetallesConsultaDTO(consulta));

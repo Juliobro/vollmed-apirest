@@ -30,6 +30,7 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**","/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/login").permitAll() //Permite todos los post en login
                         .anyRequest().authenticated()) //Las demás request deben ser autenticadas
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
